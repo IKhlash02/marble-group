@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:marble_group/config.dart';
 
 class GroupZone extends RectangleComponent {
   final Color color;
@@ -13,7 +14,7 @@ class GroupZone extends RectangleComponent {
     required this.color,
     required this.index,
     required super.size,
-  }) : super(paint: Paint()..color = color.withOpacity(0.7)) {
+  }) : super(paint: Paint()..color = color) {
     _originalPaintColor = paint.color;
     add(RectangleHitbox()..collisionType = CollisionType.passive);
   }
@@ -22,7 +23,7 @@ class GroupZone extends RectangleComponent {
   void markCorrect(bool isCorrect) {
     paint.color = isCorrect
         ? _originalPaintColor
-        : Colors.red.withOpacity(0.7);
+        : AppColors.accentRed;
   }
 
   void revertColor() {

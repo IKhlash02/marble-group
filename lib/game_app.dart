@@ -19,9 +19,6 @@ class _GameAppState extends State<GameApp> {
   int currentLevel = 0;
   List<DivisionProblem> problems = [
     DivisionProblem(dividend: 24, divisor: 3, answer: 8),
-    DivisionProblem(dividend: 15, divisor: 5, answer: 3),
-    DivisionProblem(dividend: 20, divisor: 4, answer: 5),
-    DivisionProblem(dividend: 18, divisor: 6, answer: 3),
   ];
 
   @override
@@ -40,25 +37,17 @@ class _GameAppState extends State<GameApp> {
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 8),
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 22),
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
-                color: Color(0xFFC37BBA),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                color: AppColors.headerBackground,
               ),
               child: Text(
                 'Find the result of the division',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: Colors.purple[100],
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -70,26 +59,21 @@ class _GameAppState extends State<GameApp> {
                 alignment: Alignment.center,
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 24),
+                    margin: EdgeInsets.symmetric(horizontal: 28),
                     width: double.infinity,
                     height: 120,
-                    decoration: BoxDecoration(
-                      color: AppColors.cardBackground,
-                      borderRadius: BorderRadius.circular(20.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 1,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
+                    decoration: _boxDecoration(
+                      AppColors.cardBackground,
+                      15.0,
+                      4,
+                      6,
                     ),
+
                     child: Center(
                       child: Text(
                         '${problems[currentLevel].dividend} ÷ ${problems[currentLevel].divisor}',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.purple[100],
                           fontSize: 50,
                           fontWeight: FontWeight.bold,
                         ),
@@ -99,16 +83,19 @@ class _GameAppState extends State<GameApp> {
                   Positioned(
                     bottom: -30,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF6A1B9A),
-                        borderRadius: BorderRadius.circular(12.0),
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      decoration: _boxDecoration(
+                        AppColors.cardSmallBackground,
+                        10.0,
+                        5,
+                        4,
                       ),
-                      child: const Text(
+                      child: Text(
                         '=',
                         style: TextStyle(
-                          height: 0,
-                          color: Colors.white,
+                          height: 0.8,
+                          color: Colors.purple[100],
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
                         ),
@@ -142,35 +129,26 @@ class _GameAppState extends State<GameApp> {
                 },
               ),
             ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-              child: ElevatedButton(
-                onPressed: () {
-                  game.checkAnswer();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.buttonBackground,
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(
-                      width: 4,
-                      strokeAlign: 0,
-                      color: Color.lerp(
-                        AppColors.buttonBackground,
-                        Colors.black,
-                        0.3,
-                      )!,
-                    ),
-                  ),
-                  elevation: 4,
+            InkWell(
+              onTap: () {
+                game.checkAnswer();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 10),
+                margin: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                decoration: _boxDecoration(
+                  AppColors.buttonBackground,
+                  40,
+                  3,
+                  4,
                 ),
                 child: Text(
                   'Check Answer',
                   style: TextStyle(
                     fontSize: 20,
-                    color: Colors.green,
+                    color: Colors.green[800],
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -209,5 +187,28 @@ class _GameAppState extends State<GameApp> {
         ),
       );
     }
+  }
+
+  BoxDecoration _boxDecoration(
+    Color baseColor,
+    double circular,
+    double dx,
+    double dy,
+  ) {
+    return BoxDecoration(
+      color: baseColor,
+      borderRadius: BorderRadius.circular(circular),
+      border: Border.all(
+        color: Color.lerp(baseColor, Colors.black, 0.3)!,
+        width: 3,
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: Color.lerp(baseColor, Colors.black, 0.3)!,
+          spreadRadius: 2,
+          offset: Offset(dx, dy),
+        ),
+      ],
+    );
   }
 }
