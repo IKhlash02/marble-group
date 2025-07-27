@@ -20,8 +20,7 @@ class Marble extends CircleComponent
   int? zoneIndex;
 
   Marble({required super.position})
-    :
-        super(
+    : super(
         radius: 15,
         paint: Paint()
           ..color = AppColors.cardBackground
@@ -40,7 +39,7 @@ class Marble extends CircleComponent
 
   Set<Marble> get _groupMembers {
     if (groupId == null) return {this};
-    return game.groupMap[groupId]!;
+    return game.groupMap[groupId] ?? {this};
   }
 
   void applyZoneColor(Color base) {
@@ -57,16 +56,9 @@ class Marble extends CircleComponent
     super.onCollision(intersectionPoints, other);
 
     if (other is GroupZone) {
-      var newzone = other.index;
-
-      if (game.groupMap[groupId] != null) {
-        for (var m in game.groupMap[groupId]!) {
-          m.applyZoneColor(other.color);
-          m.zoneIndex = newzone;
-        }
-      } else {
-        zoneIndex = newzone;
-        applyZoneColor(other.color);
+      for (var m in _groupMembers) {
+        m.applyZoneColor(other.color);
+        m.zoneIndex = other.index;
       }
     }
 
@@ -80,14 +72,9 @@ class Marble extends CircleComponent
     super.onCollisionEnd(other);
 
     if (other is GroupZone) {
-      if (game.groupMap[groupId] != null) {
-        for (var m in game.groupMap[groupId]!) {
-          m.applyZoneColor(AppColors.cardBackground);
-          m.zoneIndex = null;
-        }
-      } else{
-        applyZoneColor(AppColors.cardBackground);
-        zoneIndex = null;
+      for (var m in _groupMembers) {
+        m.applyZoneColor(AppColors.cardBackground);
+        m.zoneIndex = null;
       }
     }
   }

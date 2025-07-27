@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:marble_group/ui/component/play_area.dart';
 import '../../utils/config.dart';
 import '../../model/division_problem.dart';
 import '../../model/play_state.dart';
@@ -16,15 +15,18 @@ class MarbleGroupingGame extends FlameGame
   final Map<int, Set<Marble>> groupMap = {};
   List<GroupZone> groupZones = [];
 
-  MarbleGroupingGame(this.problem);
+  late PlayState _playState;
+  MarbleGroupingGame(this.problem, {PlayState initialState = PlayState.welcome}){
+    _playState = initialState;
+  }
+
 
   double get width => size.x;
 
   double get height => size.y;
 
-  final margin = 20.0;
 
-  late PlayState _playState;
+
 
   PlayState get playState => _playState;
 
@@ -46,40 +48,69 @@ class MarbleGroupingGame extends FlameGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    add(PlayArea());
-    playState = PlayState.welcome;
+    setupGame();
   }
 
   void setupGame() {
-    if (playState == PlayState.playing) return;
     groupMap.clear();
     groupZones.clear();
     removeAll(children.query<Marble>());
     removeAll(children.query<GroupZone>());
 
     playState = PlayState.playing;
+    final random = math.Random();
 
-    for (int i = 0; i < problem.divisor; i++) {
+    final zoneCount = problem.divisor;
+
+    final availableHeight = height - (2 * kGameMargin) - ((zoneCount - 1) * kGroupZoneSpacing);
+    final zoneHeight = availableHeight / zoneCount;
+
+    for (int i = 0; i < zoneCount; i++) {
+      final y = kGameMargin + i * (zoneHeight + kGroupZoneSpacing);
+
       final zone = GroupZone(
-        position: Vector2(0, (height / problem.divisor) * i),
+        position: Vector2(0, y),
         color: zoneColors[i % zoneColors.length],
-        size: Vector2(70, (height / problem.divisor) - 70),
+        size: Vector2(kGroupZoneWidth, zoneHeight),
         index: i,
       );
+
       add(zone);
       groupZones.add(zone);
     }
 
-    final random = math.Random();
+    final List<Vector2> marblePositions = [];
+    final double marbleSize = 40.0;
+
+    final startX = kGroupZoneWidth + kGameMargin + 20;
+    final endX = width - kGameMargin ;
+
+    final startY = kGameMargin;
+    final endY = height - kGameMargin - 100;
+
+    int attempts = 0;
+
     for (int i = 0; i < problem.dividend; i++) {
-      final marble = Marble(
-        position: Vector2(
-          100 + (i % 6) * 60 + random.nextDouble() * 20,
-          200 + (i ~/ 6) * 60 + random.nextDouble() * 20,
-        ),
-      );
-      add(marble);
+      Vector2 position;
+
+      do {
+        final x = (startX + random.nextDouble() * (endX - startX)).clamp(
+          startX,
+          endX - marbleSize,
+        );
+
+        final y = startY + random.nextDouble() * (endY - startY);
+        position = Vector2(x, y);
+
+        attempts++;
+        if (attempts > 1000) break;
+
+      } while (marblePositions.any((p) => p.distanceTo(position) < kMinDistance));
+
+      marblePositions.add(position);
+      add(Marble(position: position));
     }
+
     gameCompleted = false;
   }
 

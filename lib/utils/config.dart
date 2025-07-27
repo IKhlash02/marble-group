@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
-final zoneColors = [AppColors.accentOrange, AppColors.accentYellow, AppColors.accentCyan, Colors.green];
+final zoneColors = [
+  AppColors.accentOrange,
+  AppColors.accentYellow,
+  AppColors.accentCyan,
+  AppColors.accentOrange,
+  AppColors.accentYellow,
+];
 
 abstract class AppColors {
   static const Color background = Color(0xFFEB9EF3);
@@ -15,10 +21,13 @@ abstract class AppColors {
   static const Color textLight = Color(0xFFFFFFFF);
 }
 
-
 //Group Zone
- const double zoneWidth = 80.0;
- const double zoneGap = 15.0; // Jarak antar zona
- const double zoneOpacity = 0.7;
- const double zoneStrokeWidth = 6.0;
- const double zoneBorderRadius = 10.0;
+const double zoneBorderRadius = 10.0;
+const double kGameMargin = 25.0;
+const double kGroupZoneSpacing = 45.0;
+const double kGroupZoneWidth = 70.0;
+
+
+//marble
+const double kMinDistance = 50.0;
+

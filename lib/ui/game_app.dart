@@ -1,10 +1,10 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:marble_group/ui/widget/pixel_style.dart';
-import 'package:marble_group/utils/config.dart';
+import 'package:marble_group/model/overlay_type.dart';
 import 'package:marble_group/model/play_state.dart';
 import 'package:marble_group/ui/overlay_screen.dart';
-import 'package:marble_group/model/overlay_type.dart';
+import 'package:marble_group/ui/widget/pixel_style.dart';
+import 'package:marble_group/utils/config.dart';
 
 import '../model/division_problem.dart';
 import 'component/marble_grouping_game.dart';
@@ -17,16 +17,27 @@ class GameApp extends StatefulWidget {
 }
 
 class _GameAppState extends State<GameApp> {
-  late final MarbleGroupingGame game;
+  late  MarbleGroupingGame game;
   int currentLevel = 0;
-  List<DivisionProblem> problems = [
-    DivisionProblem(dividend: 24, divisor: 3, answer: 8),
-  ];
-
   @override
   void initState() {
     super.initState();
     game = MarbleGroupingGame(problems[currentLevel]);
+  }
+
+  void goToNextLevel() {
+    if (currentLevel < problems.length - 1) {
+      setState(() {
+        currentLevel++;
+        game = MarbleGroupingGame(problems[currentLevel],   initialState: PlayState.playing,);
+      });
+    } else {
+      game.playState = PlayState.welcome;
+      setState(() {
+        currentLevel = 0;
+        game = MarbleGroupingGame(problems[currentLevel]);
+      });
+    }
   }
 
   @override
@@ -65,7 +76,7 @@ class _GameAppState extends State<GameApp> {
                       Container(
                         alignment: Alignment.center,
                         margin: EdgeInsets.symmetric(horizontal: 28),
-                        width: double.infinity ,
+                        width: double.infinity,
                         height: 120,
                         decoration: pixelBoxDecoration(
                           AppColors.cardBackground,
@@ -112,8 +123,12 @@ class _GameAppState extends State<GameApp> {
                 Expanded(
                   child: GameWidget(
                     game: game,
+                    initialActiveOverlays: [PlayState.welcome.name],
+                    backgroundBuilder: (context) {
+                      return Container(color: AppColors.background);
+                    },
                     overlayBuilderMap: {
-                      PlayState.welcome.name: (context, _) =>  OverlayScreen(
+                      PlayState.welcome.name: (context, _) => OverlayScreen(
                         title: "MARBLE DIVISION",
                         subtitle: "Group the marbles to solve the division!",
                         overlayType: OverlayType.welcome,
@@ -122,16 +137,17 @@ class _GameAppState extends State<GameApp> {
                         },
                       ),
 
-                      PlayState.correct.name: (context, _) =>  OverlayScreen(
+                      PlayState.correct.name: (context, _) => OverlayScreen(
                         title: "PERFECT!",
-                        subtitle: "Great job! You grouped the marbles correctly!",
+                        subtitle:
+                            "Great job! You grouped the marbles correctly!",
                         overlayType: OverlayType.correct,
                         onTap: () {
-                          game.setupGame();
+                          goToNextLevel();
                         },
                       ),
 
-                      PlayState.wrong.name: (context, _) =>  OverlayScreen(
+                      PlayState.wrong.name: (context, _) => OverlayScreen(
                         title: "OOPS!",
                         subtitle: "Group the marbles into equal parts",
                         overlayType: OverlayType.wrong,
@@ -139,30 +155,37 @@ class _GameAppState extends State<GameApp> {
                           game.setupGame();
                         },
                       ),
+
                     },
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    game.checkAnswer();
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    margin: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                    decoration: pixelBoxDecoration(
-                      AppColors.buttonBackground,
-                      40,
-                      3,
-                      4,
-                    ),
-                    child: Text(
-                      'Check Answer',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.green[800],
-                        fontWeight: FontWeight.bold,
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                  child: InkWell(
+                    onTap: () {
+                      if (game.playState != PlayState.playing) return;
+                      game.checkAnswer();
+                    },
+                    splashColor: Colors.black,
+                    borderRadius: BorderRadius.circular(40),
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(vertical: 10),
+
+                      decoration: pixelBoxDecoration(
+                        AppColors.buttonBackground,
+                        40,
+                        3,
+                        4,
+                      ),
+                      child: Text(
+                        'Check Answer',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.green[800],
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -174,34 +197,4 @@ class _GameAppState extends State<GameApp> {
       ),
     );
   }
-
-  void nextLevel() {
-    if (currentLevel < problems.length - 1) {
-      setState(() {
-        currentLevel++;
-        game = MarbleGroupingGame(problems[currentLevel]);
-      });
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Congratulations!'),
-          content: Text('You completed all levels!'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                setState(() {
-                  currentLevel = 0;
-                  game = MarbleGroupingGame(problems[currentLevel]);
-                });
-              },
-              child: Text('Play Again'),
-            ),
-          ],
-        ),
-      );
-    }
-  }
-
 }

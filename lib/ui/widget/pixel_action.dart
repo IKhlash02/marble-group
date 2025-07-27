@@ -50,21 +50,14 @@ class PixelAction extends StatelessWidget {
   }
 
   Widget _buildStars() {
-    final colors = [
-      AppColors.accentYellow,
-      AppColors.accentOrange,
-      AppColors.accentCyan,
-      AppColors.accentOrange,
-      AppColors.accentYellow,
-    ];
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(colors.length, (i) {
+      children: List.generate(zoneColors.length, (i) {
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 4),
           width: 24,
           height: 24,
-          decoration: pixelBoxDecoration(colors[i], 4.0, 2, 3),
+          decoration: pixelBoxDecoration(zoneColors[i], 4.0, 2, 3),
           child: Icon(Icons.star, size: 16, color: AppColors.textLight),
         )
             .animate(delay: (i * 150).ms)
