@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:marble_group/game_app.dart';
+import 'package:marble_group/ui/game_app.dart';
 
 void main() {
   runApp(const MyApp());

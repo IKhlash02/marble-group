@@ -2,11 +2,10 @@ import 'dart:math' as math;
 
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:marble_group/component/play_area.dart';
-
-import '../config.dart';
-import '../data/division_problem.dart';
-import '../data/play_state.dart';
+import 'package:marble_group/ui/component/play_area.dart';
+import '../../utils/config.dart';
+import '../../model/division_problem.dart';
+import '../../model/play_state.dart';
 import 'group_zone.dart';
 import 'marble.dart';
 
@@ -43,11 +42,6 @@ class MarbleGroupingGame extends FlameGame
     }
   }
 
-  @override
-  void onTap() {
-    super.onTap();
-    setupGame();
-  }
 
   @override
   Future<void> onLoad() async {
@@ -109,18 +103,14 @@ class MarbleGroupingGame extends FlameGame
       for (final zone in groupZones) {
         zone.revertColor();
       }
+      final totalMarbles = counts.values.fold(0, (a, b) => a + b);
+      final allZonesUsed = counts.length == problem.divisor;
+      if (allCorrect && allZonesUsed && totalMarbles == problem.dividend) {
+        playState = PlayState.correct;
+      } else {
+        playState = PlayState.wrong;
+      }
+
     });
-
-    final totalMarbles = counts.values.fold(0, (a, b) => a + b);
-    final allZonesUsed = counts.length == problem.divisor;
-    if (allCorrect && allZonesUsed && totalMarbles == problem.dividend) {
-      playState = PlayState.correct;
-    } else {
-      playState = PlayState.wrong;
-    }
-  }
-
-  void reset() {
-    setupGame();
   }
 }

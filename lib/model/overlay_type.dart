@@ -1,0 +1,1 @@
+enum OverlayType { welcome, correct, wrong }

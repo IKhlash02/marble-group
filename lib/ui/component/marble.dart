@@ -4,7 +4,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
-import 'package:marble_group/config.dart';
+import 'package:marble_group/utils/color_extension.dart';
+import 'package:marble_group/utils/config.dart';
 
 import 'group_zone.dart';
 import 'marble_grouping_game.dart';
@@ -29,7 +30,7 @@ class Marble extends CircleComponent
           CircleComponent(
             radius: 15,
             paint: Paint()
-              ..color = Color.lerp(AppColors.cardBackground, Colors.black, 0.3)!
+              ..color = AppColors.cardBackground.toDarker(0.3)
               ..style = PaintingStyle.stroke
               ..strokeWidth = 4,
           ),
@@ -46,14 +47,14 @@ class Marble extends CircleComponent
     paint.color = base;
     for (final child in children.whereType<CircleComponent>()) {
       if (child.paint.style == PaintingStyle.stroke) {
-        child.paint.color = Color.lerp(base, Colors.black, 0.3)!;
+        child.paint.color = base.toDarker(0.3);
       }
     }
   }
 
   @override
-  void onCollision(Set<Vector2> intersections, PositionComponent other) {
-    super.onCollision(intersections, other);
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
 
     if (other is GroupZone) {
       var newzone = other.index;
@@ -93,14 +94,14 @@ class Marble extends CircleComponent
 
   void _handleGrouping(Marble other) {
     final gm = game.groupMap;
-    final a = this.groupId, b = other.groupId;
+    final a = groupId, b = other.groupId;
     if (a == null && b == null) {
       final id = _nextGroupId++;
       gm[id] = {this, other};
-      this.groupId = other.groupId = id;
+      groupId = other.groupId = id;
     } else if (a == null && b != null) {
       gm[b]!.add(this);
-      this.groupId = b;
+      groupId = b;
     } else if (a != b && a != null && b != null) {
       final lower = math.min(a, b), higher = math.max(a, b);
       gm[lower]!.addAll(gm[higher]!);

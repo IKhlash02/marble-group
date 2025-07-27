@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-final lightPastel = Color(0xffeba0f0);
-final deepMagenta = Color(0xffb946af);
-
 final zoneColors = [AppColors.accentOrange, AppColors.accentYellow, AppColors.accentCyan, Colors.green];
 
 abstract class AppColors {
@@ -17,3 +14,11 @@ abstract class AppColors {
   static const Color accentRed = Color(0xFFE57C7C);
   static const Color textLight = Color(0xFFFFFFFF);
 }
+
+
+//Group Zone
+ const double zoneWidth = 80.0;
+ const double zoneGap = 15.0; // Jarak antar zona
+ const double zoneOpacity = 0.7;
+ const double zoneStrokeWidth = 6.0;
+ const double zoneBorderRadius = 10.0;
