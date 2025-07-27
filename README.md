@@ -1,16 +1,21 @@
-# marble_group
+# 🧩 Marble Grouping Game
 
-A new Flutter project.
+Marble Grouping Game is a simple mobile educational game built using the [Flame engine](https://flame-engine.org/) and [Flutter](https://flutter.dev/).  
+This game is designed to help users — especially children — understand the concept of grouping and dividing objects through an interactive and visual approach using marbles.
 
-## Getting Started
+Feel free to contribute or suggest improvements!
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## ✨ Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Drag and drop marbles into specific group zones
+- Visual feedback for correct or incorrect groupings
+- Animated marble movements and collision detection
+- Intuitive touch controls
+- Built with Flame (game engine for Flutter)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Contributing
+
+Contributions are welcome!  
+Feel free to open issues or submit pull requests.
