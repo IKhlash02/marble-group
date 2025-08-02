@@ -28,13 +28,13 @@ class Marble extends CircleComponent
 
   Marble({required super.position})
     : super(
-        radius: 18,
+        radius: 15,
         paint: Paint()
           ..color = AppColors.marbleBlue
           ..style = PaintingStyle.fill,
         children: [
           CircleComponent(
-            radius: 18,
+            radius: 15,
             paint: Paint()
               ..color = AppColors.marbleBlue.toDarker(0.3)
               ..style = PaintingStyle.stroke

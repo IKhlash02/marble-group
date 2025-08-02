@@ -57,8 +57,9 @@ class MarbleGroupingGame extends FlameGame
   Future<void> onLoad() async {
     await super.onLoad();
 
-
-    setupGame();
+    if (playState != PlayState.welcome) {
+      setupGame();
+    }
   }
 
   void setupGame() {
