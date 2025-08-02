@@ -8,6 +8,14 @@ final zoneColors = [
   AppColors.accentYellow,
 ];
 
+final groupColors = [
+  AppColors.marblePurple,
+  AppColors.marbleMagenta,
+  AppColors.marbleRed,
+  AppColors.marbleOrange,
+  AppColors.marbleGreen,
+];
+
 abstract class AppColors {
   static const Color background = Color(0xFFEB9EF3);
   static const Color headerBackground = Color(0xFFb74aaf);
@@ -19,6 +27,13 @@ abstract class AppColors {
   static const Color accentCyan = Color(0xFF7ADCE1);
   static const Color accentRed = Color(0xFFE57C7C);
   static const Color textLight = Color(0xFFFFFFFF);
+
+  static const Color marbleBlue   = Color(0xFF2196F3);
+  static const Color marblePurple = Color(0xFF9C27B0);
+  static const Color marbleMagenta= Color(0xFFFF00FF);
+  static const Color marbleRed    = Color(0xFFF44336);
+  static const Color marbleOrange = Color(0xFFFF9800);
+  static const Color marbleGreen  = Color(0xFF4CAF50);
 }
 
 //Group Zone

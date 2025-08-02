@@ -25,6 +25,7 @@ class MarbleGroupingGame extends FlameGame
 
   double get height => size.y;
 
+  double totalElapsedTime = 0.0;
 
 
 
@@ -44,10 +45,19 @@ class MarbleGroupingGame extends FlameGame
     }
   }
 
+  @override
+  void update(double dt) {
+    super.update(dt);
+    // Tambahkan delta time (dt) ke total setiap frame.
+    totalElapsedTime += dt;
+  }
+
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+
+
     setupGame();
   }
 
@@ -90,6 +100,8 @@ class MarbleGroupingGame extends FlameGame
 
     int attempts = 0;
 
+
+
     for (int i = 0; i < problem.dividend; i++) {
       Vector2 position;
 
@@ -109,6 +121,7 @@ class MarbleGroupingGame extends FlameGame
 
       marblePositions.add(position);
       add(Marble(position: position));
+
     }
 
     gameCompleted = false;
